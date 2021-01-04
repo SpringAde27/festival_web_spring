@@ -1,0 +1,122 @@
+@charset "UTF-8";
+
+.hide {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.pointer-color {
+  cursor: pointer;
+  color: #212529;
+  -webkit-transition: color ease 0.5s;
+  transition: color ease 0.5s;
+}
+
+.pointer-color:hover {
+  color: #ced4da;
+}
+
+.page-header {
+  padding-bottom: 9px;
+  margin: 40px 0 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.border-pill {
+  border-radius: 16px;
+}
+
+/* 줄 바꿈 */
+.text-break {
+  overflow: hidden;
+  word-break: break-word !important;
+  word-wrap: break-word !important;
+}
+
+/* 말 줄임 */
+.ellipsis-1 {
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.ellipsis-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  /* 웹킷엔진 미사용 대응 */
+  line-height: 1.5rem;
+  height: 3rem;
+}
+
+/* animation : fade-in */
+.appear {
+  animation: fade-in 1s;
+  -moz-animation: fade-in 1s; /* Firefox */
+  -webkit-animation: fade-in 1s; /* Safari and Chrome */
+  -o-animation: fade-in 1s; /* Opera */
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+.disappear {
+  animation: fade-out 1s;
+  -moz-animation: fade-out 1s; /* Firefox */
+  -webkit-animation: fade-out 1s; /* Safari and Chrome */
+  -o-animation: fade-out 1s; /* Opera */
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+/* fade-in : animation */
+@-moz-keyframes fade-in { /* Firefox */
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@-webkit-keyframes fade-in { /* Safari and Chrome */
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@-o-keyframes fade-in { /* Opera */
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* animation : fade-out */
+@-moz-keyframes fade-out { /* Firefox */
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@-webkit-keyframes fade-out { /* Safari and Chrome */
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@-o-keyframes fade-out { /* Opera */
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* 이미지 반응형 */
+.image-responsive {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}

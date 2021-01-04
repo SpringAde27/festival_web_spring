@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+  xmlns:task="http://www.springframework.org/schema/task"
+  xsi:schemaLocation="http://www.springframework.org/schema/jdbc
+    http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+    http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+    http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+  <!-- Root Context: defines shared resources visible to all other web components -->
+
+  <!-- properties 파일 로딩 -->
+  <context:property-placeholder location="classpath:/jdbc.properties"/>
+
+  <!-- MySQL과의 연결 설정 : DataSource -->
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${jdbc.driverClassName}"/>
+    <property name="url" value="${jdbc.url}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+  </bean>
+
+  <!-- Connection생성 & 데이터베이스 연결 & SQL실행 : sqlSessionFactory -->
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!-- setter를 통한 의존성 주입 -->
+    <property name="dataSource" ref="dataSource"/>
+    <!-- MyBatis 설정 파일 경로 -->
+    <property name="configLocation" value="classpath:/mybatis-config.xml"/>
+    <!-- sql Mapper.xml파일 경로 -->
+    <property name="mapperLocations" value="classpath:/mappers/**/*Mapper.xml"/>
+  </bean>
+
+  <!-- Mapper인터페이스 인식 -->
+  <mybatis-spring:scan base-package="com.iy.festival.mapper"/>
+
+  <!-- Sql Ssession Template 설정 -->
+  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+    <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+  </bean>
+
+  <!-- Transaction -->
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <!-- @Resource(name="uploadFolder") 서버의 파일 저장 경로 설정 -->
+  <bean id="uploadFolder" class="java.lang.String">
+    <constructor-arg value="D:\\uploadFiles\\uploadPath"/>
+  </bean>
+
+  <tx:annotation-driven />
+
+  <task:annotation-driven />
+
+  <!-- 패키지의 class를 bean으로 등록 -->
+  <context:component-scan base-package="com.iy.festival.persistence"/><!-- @repository -->
+  <context:component-scan base-package="com.iy.festival.service"/><!-- @service -->
+
+</beans>

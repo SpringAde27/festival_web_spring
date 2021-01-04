@@ -1,0 +1,14 @@
+## Domain
+# Value Object가 사용하는 패키지
+
+## Persistence
+# DAO패키지
+
+## Service
+# 서비스 인터페이스와 구현 클래스 패키지
+
+## Controller
+# 스프링 MVC의 컨트롤러 패키지
+
+## Resource/mappers
+# MyBatis의 XML Mapper

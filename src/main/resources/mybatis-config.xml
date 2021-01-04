@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+  <settings>
+    <!-- DB column은 snake_case / Java Bean은 carmelCase로 설정을 하였기에 이를 매핑하기 위한 설정 (snake_case를 carmelCase로 변경) -->
+    <setting name="mapUnderscoreToCamelCase" value="true" />
+  </settings>
+
+  <!-- mapper.xml에서 parameterType이나 resultType으로 Alias를 사용 -->
+  <typeAliases>
+    <!-- 패키지에 해당하는 모든 파일을 인식 -->
+    <package name="com.iy.festival.domain" />
+  </typeAliases>
+</configuration>
