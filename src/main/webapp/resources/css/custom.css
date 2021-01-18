@@ -1,2 +1,65 @@
 @charset "UTF-8";
 
+/** ---------- Bootstrap v4.4.1 **/
+
+/* close button */
+button.close {
+  outline: none !important;
+}
+
+/* 버튼 클릭 후 outline 제거 */
+.btn:focus, .btn:active {
+  outline: none !important;
+  box-shadow: none;
+}
+
+/* data-backdrop="static" data-keyboard="false" blinks on outside click. */
+.modal.modal-static .modal-dialog {
+  -webkit-transform: none !important;
+  transform: none !important;
+}
+
+/*
+.modal-open {
+  overflow-y: auto !important;
+  padding-right: 0 !important;
+}
+*/
+
+/* Modal Frame */
+.modal-content {
+  border-radius: 0.7rem !important;
+}
+.my-button-group {
+  border-top: 1px solid #ced4da;
+}
+.my-button {
+  outline: none;
+  border: 0;
+  background-color: #fff;
+  transition: background-color .15s ease-in-out;
+}
+.my-button:first-child {
+  border-bottom-left-radius: 0.7rem;
+  color: #6c757d;
+}
+.my-button:last-child {
+  border-left: 1px solid #ced4da;
+  border-bottom-right-radius: 0.7rem;
+  color: #007bff;
+}
+.my-button:first-child:active {
+  background-color: #e5e5e5;
+}
+.my-button:last-child:active {
+  background-color: #e5e5e5;
+}
+.my-button:focus, .my-button:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* bootstrap table */
+.table td, .table th {
+  vertical-align: middle !important;
+}

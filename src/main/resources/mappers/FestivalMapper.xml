@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iy.festival.mappers.FestivalMapper">
+
+  <resultMap type="FestivalVO" id="FestivalResult">
+    <id property="fNo" column="f_no" />
+    <result property="fTitle" column="f_title" />
+    <result property="fTheme" column="f_theme" />
+    <result property="fStartdate" column="f_startdate" />
+    <result property="fEnddate" column="f_enddate" />
+    <result property="fHost" column="f_host" />
+    <result property="fPhone" column="f_phone" />
+    <result property="fPostcode" column="f_postcode" />
+    <result property="fAddr1" column="f_addr1" />
+    <result property="fAddr2" column="f_addr2" />
+    <result property="fAddr3" column="f_addr3" />
+    <result property="fLatitude" column="f_latitude" />
+    <result property="fLongitude" column="f_longitude" />
+    <result property="fContent" column="f_content" />
+    <result property="fImg" column="f_img" />
+    <result property="fLike" column="f_like" />
+    <result property="rank" column="rank" />
+  </resultMap>
+
+  <insert id="create" parameterType="FestivalVO"><!-- SQL id값은 DAO impl과 동일하게 설정 -->
+    INSERT INTO festival
+    (f_title, f_theme, f_startdate, f_enddate, f_postcode, f_addr1, f_addr2, f_addr3, f_host, f_phone, f_latitude, f_longitude, f_content, f_img, f_like)
+    VALUES
+    (#{fTitle}, #{fTheme}, #{fStartdate}, #{fEnddate}, #{fPostcode}, #{fAddr1}, #{fAddr2}, #{fAddr3}, #{fHost}, #{fPhone}, #{fLatitude}, #{fLongitude}, #{fContent}, #{fImg}, #{fLike})
+    <selectKey keyProperty="fNo" resultType="int" order="AFTER"><!-- selectKey 사용 시, root-context.xml에서 BATCH 설정을 주석 -->
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+
+  <!-- 전체 목록 -->
+  <select id="getListAll" resultMap="FestivalResult">
+    SELECT *
+    FROM festival
+    ORDER BY f_no DESC
+  </select>
+
+  <!-- Pagination -->
+  <select id="getListPage" resultMap="FestivalResult">
+    SELECT *
+    FROM festival
+    WHERE f_no > 0
+    ORDER BY f_no DESC
+    LIMIT #{page}, 10
+  </select>
+
+  <!-- Criteria -->
+  <select id="getListCriteria" resultMap="FestivalResult">
+    SELECT *
+    FROM festival
+    WHERE f_no > 0
+    ORDER BY f_no DESC
+    LIMIT #{pageStart}, #{amount} <!-- Criteria의 get메서드 호출 -->
+  </select>
+
+  <!-- 게시물 전체 개수 -->
+  <select id="getTotalCount" resultType="int">
+    SELECT count(*) FROM festival WHERE f_no > 0
+  </select>
+
+  <!-- Search Criteria -->
+  <select id="getListSearch" resultMap="FestivalResult">
+    SELECT *
+    FROM festival
+    WHERE f_no > 0
+    <include refid="search"></include>
+    ORDER BY f_no DESC
+    LIMIT #{pageStart}, #{amount}
+  </select>
+
+  <!-- Search Criteria Count -->
+  <select id="listSearchCount" resultType="int">
+    SELECT count(f_no)
+    FROM festival
+    WHERE f_no > 0
+    <include refid="search"></include>
+  </select>
+
+  <!-- 검색조건 -->
+  <sql id="search">
+    <if test="searchType != null">
+      <if test="searchType == 't'.toString()">
+        AND f_title LIKE CONCAT ('%', #{keyword}, '%')
+      </if>
+      <if test="searchType == 'ct'.toString()">
+        AND ( f_content LIKE CONCAT ('%', #{keyword}, '%')
+        OR f_theme LIKE CONCAT ('%', #{keyword}, '%') )
+      </if>
+    </if>
+  </sql>
+
+  <!-- id에 해당하는 상세보기 -->
+  <select id="read" resultMap="FestivalResult">
+    SELECT * FROM festival
+    <include refid="where_fno"></include>
+  </select>
+
+  <delete id="delete">
+    DELETE FROM festival
+    <include refid="where_fno"></include>
+  </delete>
+
+  <update id="update">
+    UPDATE
+      festival
+    SET
+      f_title=#{fTitle}, f_theme=#{fTheme}, f_startdate=#{fStartdate}, f_enddate=#{fEnddate},
+      f_postcode=#{fPostcode}, f_addr1=#{fAddr1}, f_addr2=#{fAddr2}, f_addr3=#{fAddr3},
+      f_host=#{fHost}, f_phone=#{fPhone}, f_latitude=#{fLatitude}, f_longitude=#{fLongitude},
+      f_content=#{fContent}, f_img=#{fImg}, f_like=#{fLike}
+    <include refid="where_fno"></include>
+  </update>
+
+  <update id="updateLikeCount">
+    UPDATE
+      festival
+    SET
+      f_like=f_like + #{amount}
+    <include refid="where_fno"></include>
+  </update>
+
+  <!-- 공통 where절 -->
+  <sql id="where_fno">
+    WHERE f_no = #{fNo}
+  </sql>
+
+</mapper>

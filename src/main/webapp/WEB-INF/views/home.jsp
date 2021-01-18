@@ -7,17 +7,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>모두의 축제</title>
 <meta content="" name="descriptison">
 <meta content="" name="keywords">
 <%@ include file="include/top_path.jsp" %>
 <link href="${pageContext.request.contextPath}/resources/css/home.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+  <%@ include file="include/nav.jsp" %>
 
-  ${ serverTime }
+  <%@ include file="include/header.jsp" %>
 
-  <script type="text/javascript">
+  <%@ include file="include/footer.jsp" %>
+
+  <%@ include file="include/bottom_path.jsp" %>
+
+  <script>
+    $(function() {
+      // Script to Activate the Carousel
+      $('.carousel').carousel({
+        interval : 2000 //changes the speed
+      });
+    });
   </script>
 </body>
 </html>

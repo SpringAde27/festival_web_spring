@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iy.festival.mapper.FestivalAttachMapper">
+
+  <!-- VO(DTO)변수명과 DB칼럼명이 같으면, resultType으로 매핑 / 다르면, resultMap으로 매핑 -->
+  <resultMap type="FestivalAttachVO" id="festivalAttachResult">
+    <id property="uuid" column="uuid"/>
+    <result property="uploadPath" column="upload_path"/>
+    <result property="fileName" column="file_name"/>
+    <result property="fNo" column="f_no"/>
+    <result property="createdAt" column="created_at"/>
+  </resultMap>
+
+  <resultMap type="FestivalVO" id="festivalResult">
+    <id property="fNo" column="f_no"/>
+    <result property="fTitle" column="f_title"/>
+    <result property="fTheme" column="f_theme"/>
+    <result property="fStartdate" column="f_startdate"/>
+    <result property="fEnddate" column="f_enddate"/>
+    <result property="fHost" column="f_host" />
+    <result property="fPhone" column="f_phone"/>
+    <result property="fPostcode" column="f_postcode"/>
+    <result property="fAddr1" column="f_addr1"/>
+    <result property="fAddr2" column="f_addr2"/>
+    <result property="fAddr3" column="f_addr3"/>
+    <result property="fLatitude" column="f_latitude"/>
+    <result property="fLongitude" column="f_longitude"/>
+    <result property="fContent" column="f_content"/>
+    <result property="fImg" column="f_img"/>
+    <result property="fLike" column="f_like"/>
+    <result property="rank" column="rank"/>
+    <collection property="attachList" resultMap="festivalAttachResult"/>
+  </resultMap>
+
+  <insert id="insert">
+    insert into festival_attach (uuid, upload_path, file_name, f_no)
+    values (#{uuid}, #{uploadPath}, #{fileName}, #{fNo})
+  </insert>
+
+  <delete id="delete">
+    delete from festival_attach where upload_path = #{uploadPath}
+  </delete>
+
+  <select id="findAttachFileByFno" resultType="FestivalAttachVO">
+    select * from festival_attach where f_no = #{fNo}
+  </select>
+
+  <delete id="deleteByAll">
+    delete from festival_attach where f_no = #{fNo}
+  </delete>
+
+</mapper>
