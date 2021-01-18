@@ -207,6 +207,20 @@
       <artifactId>thumbnailator</artifactId>
       <version>0.4.8</version>
     </dependency>
+
+    <!-- [iy] Quartz (scheduling) -->
+    <dependency>
+      <groupId>org.quartz-scheduler</groupId>
+      <artifactId>quartz</artifactId>
+      <version>2.3.2</version>
+    </dependency>
+
+    <!-- [iy] Quartz-jobs (scheduling) -->
+    <dependency>
+      <groupId>org.quartz-scheduler</groupId>
+      <artifactId>quartz-jobs</artifactId>
+      <version>2.3.2</version>
+    </dependency>
   </dependencies>
 
   <!-- 빌드에 사용할 플러그인 -->

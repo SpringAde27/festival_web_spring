@@ -50,4 +50,12 @@
     delete from festival_attach where f_no = #{fNo}
   </delete>
 
+  <select id="getOldFiles" resultMap="festivalResult" resultType="FestivalVO">
+    select f.f_no, f.f_img, fa.upload_path, fa.created_at
+    from festival as f
+    left join festival_attach as fa
+    on f.f_no = fa.f_no
+    where fa.created_at >= date_add(now(), interval -1 day)
+  </select>
+
 </mapper>
