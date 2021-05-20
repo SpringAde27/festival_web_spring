@@ -1,4 +1,4 @@
-package com.iy.festival;
+package com.iy.festival.controller;
 
 import java.util.List;
 
@@ -27,7 +27,8 @@ import com.iy.festival.persistence.FestivalDAO;
 @WebAppConfiguration
 @ContextConfiguration({
   "file:src/main/webapp/WEB-INF/spring/root-context.xml",
-  "file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml", })
+  "file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
+})
 public class FestivalControllerTest {
 
   private static final Logger logger = LoggerFactory.getLogger(FestivalControllerTest.class);

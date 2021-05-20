@@ -1,18 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-  xmlns="http://www.springframework.org/schema/beans" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:security="http://www.springframework.org/schema/security" 
-  xsi:schemaLocation="http://www.springframework.org/schema/security 
-  http://www.springframework.org/schema/security/spring-security-5.2.xsd 
-  http://www.springframework.org/schema/beans 
-  http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans:beans 
+  xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-5.3.xsd
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <security:http auto-config="true" use-expressions="true">
-    <security:form-login />
-  </security:http>
+  <!--
+      #.http속성
+      * auto-config : 자동 설정
+      * use-expressions : intercept-url의 SpEL문법의 사용유무
+      
+      #.form-login속성
+      * username-parameter : 로그인 폼 - 아이디 입력 필드에 사용될 input name
+      * password-parameter : 로그인 폼 - 비밀번호 입력 필드에 사용될 input name
+      * login-processing-url : 로그인 페이지 form에 action에 입력할 주소 url
+      * login-page : 로그인 페이지 url (기본값 : /login)
+      * default-target-url : 로그인 성공 시 이동 할 페이지
+      * authentication-failure-url : 로그인 실패 시 이동 할 페이지
+      * authentication-success-handler-ref : 로그인 인증 성공 시 리다이렉트 될 핸들러
+      * authentication-failure-handler-ref : 로그인 인증 실패 시 리다이렉트 될 핸들러
+      * always-use-default-target : 항상 핸들러가 지정한 페이지로 이동 (기본값 : false)
+      
+      #.logout속성
+      * logout-url : 로그아웃 요청에 대한 URL
+      * logout logout-success-url : 로그아웃 성공 시 URL
+      * invalidate-session : 세션 삭제 여부
+      * delete-cookies : 쿠키 삭제 여부
+  -->
 
-  <security:authentication-manager>
-  </security:authentication-manager>
+  <beans:bean id="customAccessDenied" class="com.iy.festival.security.CustomAccessDeniedHandler"></beans:bean>
+  <beans:bean id="customLoginSuccess" class="com.iy.festival.security.CustomLoginSuccessHandler"></beans:bean>
+  <beans:bean id="customUserDetailsService" class="com.iy.festival.security.CustomUserDetailsService"></beans:bean>
+  <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean>
 
-</beans>
+  <http auto-config="true" use-expressions="true">
+    <intercept-url pattern="/resources/**" access="permitAll"/>
+    <intercept-url pattern="/user/admin" access="hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')"/>
+    <intercept-url pattern="/user/member" access="hasRole('ROLE_MEMBER')"/>
+    <intercept-url pattern="/**" access="permitAll"/>
+    
+    <!-- 접근제한 - AccessDeniedHandler구현 (핸들러를 통해 에러 페이지로 리다이렉트 된다.) -->
+    <access-denied-handler ref="customAccessDenied"/>
+    
+    <!-- 접근제한 - 특정 URI지정 (에러 페이지만 제공하는 경우, 사용자가 접근했던  URL이 유지가 된다.) -->
+    <!-- <access-denied-handler error-page="/error/error_403"/> -->
+    
+    <!-- CSRF(Cross Site Resquest Fosery) 공격을 방어 처리 (기본값 : false) -->
+    <!-- <csrf disabled="true"/> -->
+    
+    <!-- 로그인 설정 -->
+    <form-login
+      username-parameter="user_id"
+      password-parameter="user_pw"
+      login-page="/user/login"
+      authentication-success-handler-ref="customLoginSuccess"/>
+    
+    <!-- 자동로그인 설정 (일주일 유효) -->
+    <remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+    
+    <!-- 로그아웃 설정 -->
+    <logout logout-url="/user/logout" invalidate-session="true" delete-cookies="remember-me, JESSIONID"/>
+
+  </http>
+
+  <!-- provider  -->
+  <authentication-manager>
+    <authentication-provider user-service-ref="customUserDetailsService">
+      <password-encoder ref="bcryptPasswordEncoder"/>
+    </authentication-provider>
+    
+    <!-- JDBC를 이용한 간편 인증/권한 처리 -->
+    <!-- jdbc-user-service data-source-ref="dataSource"/> -->
+
+    <!--<user-service>
+          <user name="admin" password="{noop}admin" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
+          <user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
+        </user-service>
+     -->
+  </authentication-manager>
+
+</beans:beans>

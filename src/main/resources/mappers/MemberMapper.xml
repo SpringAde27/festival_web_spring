@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iy.festival.mapper.MemberMapper">
+
+  <resultMap type="MemberVO" id="memberMap">
+    <id property="user_no" column="user_no"/>
+    <result property="user_id" column="user_id"/>
+    <result property="user_pw" column="user_pw"/>
+    <result property="enabled" column="enabled"/>
+    <result property="name" column="name"/>
+    <result property="email" column="email"/>
+    <result property="phone" column="phone"/>
+    <result property="gender" column="gender"/>
+    <result property="postcode" column="postcode"/>
+    <result property="addr1" column="addr1"/>
+    <result property="addr2" column="addr2"/>
+    <result property="addr3" column="addr3"/>
+    <result property="created_at" column="created_at"/>
+    <result property="updated_at" column="updated_at"/>
+    <collection property="authList" resultMap="authMap"></collection> <!-- 1:N의 결과를 처리 -->
+  </resultMap>
+
+  <resultMap type="AuthVO" id="authMap">
+    <result property="user_no" column="user_no"/>
+    <result property="user_id" column="user_id"/>
+    <result property="auth" column="auth"/>
+  </resultMap>
+
+  <select id="selectMember" resultMap="memberMap">
+    SELECT *
+    FROM members
+      LEFT OUTER JOIN auth
+      ON members.user_id = auth.user_id
+    WHERE members.user_id = #{user_id}
+  </select>
+  
+  <insert id="insertMember" parameterType="MemberVO">
+    INSERT INTO members(user_id, user_pw, name) VALUES (#{user_id}, #{user_pw}, #{name})
+  </insert>
+  
+  <insert id="insertAuth" parameterType="AuthVO">
+    INSERT INTO auth(user_id, auth) VALUES (#{user_id}, #{auth})
+  </insert>
+
+</mapper>
